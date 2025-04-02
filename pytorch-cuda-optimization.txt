@@ -1,6 +1,16 @@
-//check how cuda works underneath python abstraction
+# check how cuda works underneath python abstraction
 
-#pragma omp for [clause ...]  //implicit barrier
+# Interesting worksharing constructs
+pragma omp for | sections | single
+
+# Interesting thread synchronization constructs
+pragma omp barrier | critical | atomic | omp_lock_t lock, omp_init_lock, omp_destroy_lock, omp_set_lock
+
+# Interesting runtime library function
+omp_get_num_threads(), omp_get_thread_num(), omp_set_num_threads, omp_set_dynamic(false), omp_set_nested(false)
+
+
+pragma omp for [clause ...]  //implicit barrier
     // Loop iterations are divided into pieces of size chunk and
     dynamically scheduled among the threads; when a thread
     finishes one chunk, it is dynamically assigned another
@@ -18,7 +28,7 @@
 <for_loop>
 
 
-#pragma omp sections [clause ...]
+pragma omp sections [clause ...]
     private (list)
     firstprivate (list)
     lastprivate (list)
@@ -33,7 +43,20 @@
  ...
 }
 
-// check how this works in pytorch or if beneficial for image processing!
+# Tasks how fine grained can we even go in pytorch
+pragma omp task
+    default (shared|none)
+    private (list)
+    firstprivate (list)
+    shared (list)
+    if (logical-expr.)
+    final (logical-expr.)
+    mergeable
+    depend (dependence-type:list)
+    priority (priority-value)
+    untied
+
+# check how this works in pytorch or if beneficial for image processing!
 int histo[MAX_THREADS];
 #pragma omp parallel private(i)
 {
@@ -65,9 +88,9 @@ int histo[MAX_THREADS];
 
 
 struct mycount
-{int count; char padding[60];};
-struct mycount padhisto[MAXTH];
-#pragma omp parallel private(i)
+    {int count; char padding[60];};
+    struct mycount padhisto[MAXTH];
+    #pragma omp parallel private(i)
 {
     int nthreads, myid;
     nthreads = omp_get_num_threads();
@@ -78,20 +101,8 @@ struct mycount padhisto[MAXTH];
     }
 }   
 
-//Tasks how fine grained can we even go in pytorch
-default (shared|none)
-private (list)
-firstprivate (list)
-shared (list)
-if (logical-expr.)
-final (logical-expr.)
-mergeable
-depend (dependence-type:list)
-priority (priority-value)
-untied
-
-//mpi program structure, compatible with pytorch?
-MPI_INIT
+# mpi program structure, compatible with pytorch?
+- MPI_INIT
 – MPI_FINALIZE
 – MPI_COMM_SIZE
 – MPI_COMM_RANK
