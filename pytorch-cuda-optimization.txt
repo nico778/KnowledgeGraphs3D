@@ -153,7 +153,7 @@ pragma omp for
 – MPI_SEND
 – MPI_RECV
 
-RMA in MPI? maybe depends how many gpus are available
+# RMA in MPI? maybe depends how many gpus are available
 ● One sided
 ● Remote Memory Access
 ● MPI_Put and MPI_Get
@@ -203,3 +203,36 @@ integer) || displacement from window start to the beginning of the target buffer
 ○ Source rank of source (integer)
 ○ Tag message tag (integer)
 ○ Comm communicator (handle)
+
+// Collective
+MPI_Gather    
+MPI_Reduce     
+MPI_Scatter     
+MPI_Bcast
+
+// Alltoall
+MPI_Allgather
+MPI_Alltoall
+MPI_Allreduce 
+MPI_Reduce_scatter
+
+MPI_Scan
+MPI_Exscan
+MPI_Barrier
+// The call blocks until all processes in the group of the communicator comm
+// have called MPI_Barrier    
+
+// Modes for sending messages
+Standard Mode - MPI_(I)Send (The runtime system decides whether the message is buffered. )
+● Buffered mode - MPI_Bsend (user supplies a buffer to the system for its use)
+● Ready mode - MPI_Rsend (This mode assumes that an appropriate receive was started)
+● Synchronized mode - MPI_Ssend (does not complete until a matching receive has begun)
+
+// One-sided
+MPI_Win_create (w/ existing buffer) or MPI_Win_allocate(_shared) (MPI allocates buffer)
+MPI_Win_create_dynamic (create RMA window w/o attached memory) then
+MPI_Win_attach (
+
+// Atomic one-sided operations:
+• MPI_Accumulate, MPI_Get_accumulate
+• MPI_Fetch_and_op, MPI_Compare_and_swap
