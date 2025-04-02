@@ -1,5 +1,16 @@
 # check how cuda works underneath python abstraction
 
+pragma omp parallel // creates team of threads
+    if (scalar_expression)
+    private (list)
+    shared (list)
+    default (shared | none) //all threads execute code
+    firstprivate (list)
+    lastprivate (list)
+    reduction (operator: list)
+    copyin (list)
+    num_threads
+
 # Interesting worksharing constructs
 pragma omp for | sections | single
 
@@ -12,14 +23,14 @@ omp_get_num_threads(), omp_get_thread_num(), omp_set_num_threads, omp_set_dynami
 
 pragma omp for [clause ...]  //implicit barrier
     // Loop iterations are divided into pieces of size chunk and
-    dynamically scheduled among the threads; when a thread
-    finishes one chunk, it is dynamically assigned another
-    schedule (type [,chunk])
-    ordered
+    // dynamically scheduled among the threads; when a thread
+    // finishes one chunk, it is dynamically assigned another
     private (list)
     firstprivate (list)
     lastprivate (list)
     shared (list)
+    schedule (type [,chunk])
+    ordered
     reduction (operator: list)
     collapse (n)
     // Threads do not synchronize at the end of the parallel loop.
@@ -42,6 +53,12 @@ pragma omp sections [clause ...]
  <structured_block>
  ...
 }
+
+pragma omp single [clause ...]
+    private (list)
+    firstprivate (list)
+    copyprivate (operator: list) // Broadcasts values from single thread to all threads
+    nowait
 
 # Tasks how fine grained can we even go in pytorch
 pragma omp task
@@ -100,6 +117,33 @@ struct mycount
             padhisto[myid].count++; }
     }
 }   
+
+# ! Very important to prevent unwanted side effects
+// OpenMP Data-Sharing Attribute Rules
+pragma omp parallel
+    Global/static variables: Shared
+    Local automatic variables: Private
+    Loop iteration variables (in combined parallel for): Private
+    Default for other variables: Shared
+
+pragma omp for
+    Loop iteration variable: Private
+    Variables declared in the loop: Private
+    Other variables: Inherit from enclosing parallel region
+
+#pragma omp single
+    Variables declared in the single region: Private
+    Other variables: Inherit from enclosing parallel region
+
+#pragma omp sections
+    Variables declared in the sections: Private
+    Other variables: Inherit from enclosing parallel region
+
+#pragma omp task
+    Global/static variables: Shared
+    Variables declared in the task: Private
+    Variables from enclosing context: Firstprivate by default
+    Variables explicitly shared in enclosing context: Remain shared
 
 # mpi program structure, compatible with pytorch?
 - MPI_INIT
