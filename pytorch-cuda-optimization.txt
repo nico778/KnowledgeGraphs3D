@@ -229,9 +229,10 @@ Standard Mode - MPI_(I)Send (The runtime system decides whether the message is b
 ● Synchronized mode - MPI_Ssend (does not complete until a matching receive has begun)
 
 // One-sided
-MPI_Win_create (w/ existing buffer) or MPI_Win_allocate(_shared) (MPI allocates buffer)
-MPI_Win_create_dynamic (create RMA window w/o attached memory) then
-MPI_Win_attach (
+MPI_Win_create (w/ existing buffer, user-allocated memory exposed as window) or MPI_Win_allocate(_shared) (MPI allocates buffer)
+MPI_Win_create_dynamic (create RMA window w/o attached memory, allow user to attach any number of windows) then
+MPI_Win_attach
+MPI_Win_free
 
 // Atomic one-sided operations:
 • MPI_Accumulate, MPI_Get_accumulate
