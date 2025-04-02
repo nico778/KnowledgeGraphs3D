@@ -235,5 +235,5 @@ MPI_Win_attach
 MPI_Win_free
 
 // Atomic one-sided operations:
-• MPI_Accumulate, MPI_Get_accumulate
-• MPI_Fetch_and_op, MPI_Compare_and_swap
+• MPI_Accumulate, MPI_Get_accumulate (return content of target buffer before accumulation in result_addr, element-wise atomically)
+• MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op), MPI_Compare_and_swap (compare_addr with value at target_disp)
