@@ -145,13 +145,57 @@ pragma omp for
     Variables from enclosing context: Firstprivate by default
     Variables explicitly shared in enclosing context: Remain shared
 
+Message Passing:
+- comm and sync (barriers) requires subroutine calls
+- comm: P2P | Collective | One-sided (1 prcsr)
+
+MPI SPMD (master-worker) | MPMD
+
+group(ps(rank)) + context(all messages s+r) => communicator (default:MPI_COMM_WORLD)
+
+MPI Tags:
+- send message(user sets int tag) => helps rec p id message
+- rec: screen for message or MPI_ANY_TAG
+
 # mpi program structure, compatible with pytorch?
 - MPI_INIT
 – MPI_FINALIZE
-– MPI_COMM_SIZE
-– MPI_COMM_RANK
+– MPI_COMM_SIZE (# of processes)
+– MPI_COMM_RANK (# current process)
 – MPI_SEND
 – MPI_RECV
+
+MPI Parameters (Put, Get, Send/Rec)
+● Put/Get:
+○ origin_addr - initial address of origin buffer (choice) || Address of the buffer in
+which to receive the data
+○ origin_count - number of entries in origin buffer (nonnegative integer)
+○ origin_datatype datatype of each entry in origin buffer (handle)
+○ Target_rank rank of target (nonnegative integer)
+○ Target_disp displacement from start of window to target buffer (nonnegative
+integer) || displacement from window start to the beginning of the target buffer
+(nonnegative integer)
+○ Target_count number of entries in target buffer (nonnegative integer)
+○ Target_datatype datatype of each entry in target buffer (handle)
+○ Win window object used for communication (handle)
+
+● Send(start, count, datatype, dest, tag, comm)
+○ Buf initial address of send buffer (choice)
+○ Count number of elements in send buffer (nonnegative integer)
+○ Datatype datatype of each send buffer element (handle)
+○ Dest rank of destination (integer)
+○ Tag message tag (integer)
+○ Comm communicator (handle)
+
+● Recv(start, count, datatype, source, tag, comm, status)
+○ Count maximum number of elements in receive buffer (integer)
+○ Datatype datatype of each receive buffer element (handle)
+○ Source rank of source (integer)
+○ Tag message tag (integer)
+○ Comm communicator (handle)
+
+Collective Ops:
+- each p in comm exec same code, same seq
 
 # RMA in MPI? maybe depends how many gpus are available
 ● One sided
@@ -175,34 +219,6 @@ Active / Passive Target Synchronization:
 ○ MPI_Win_lock()
 ○ MPI_Win_unlock()
 ○ Target does not call any sync routines (hence passive)
-
-
-MPI Parameters (Put, Get, Send/Rec)
-● Put/Get:
-○ origin_addr - initial address of origin buffer (choice) || Address of the buffer in
-which to receive the data
-○ origin_count - number of entries in origin buffer (nonnegative integer)
-○ origin_datatype datatype of each entry in origin buffer (handle)
-○ Target_rank rank of target (nonnegative integer)
-○ Target_disp displacement from start of window to target buffer (nonnegative
-integer) || displacement from window start to the beginning of the target buffer
-(nonnegative integer)
-○ Target_count number of entries in target buffer (nonnegative integer)
-○ Target_datatype datatype of each entry in target buffer (handle)
-○ Win window object used for communication (handle)
-● Send
-○ Buf initial address of send buffer (choice)
-○ Count number of elements in send buffer (nonnegative integer)
-○ Datatype datatype of each send buffer element (handle)
-○ Dest rank of destination (integer)
-○ Tag message tag (integer)
-○ Comm communicator (handle)
-● Recv
-○ Count maximum number of elements in receive buffer (integer)
-○ Datatype datatype of each receive buffer element (handle)
-○ Source rank of source (integer)
-○ Tag message tag (integer)
-○ Comm communicator (handle)
 
 // Collective
 MPI_Gather    
