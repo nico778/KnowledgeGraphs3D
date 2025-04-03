@@ -146,7 +146,7 @@ pragma omp for
     Variables explicitly shared in enclosing context: Remain shared
 
 Message Passing:
-- comm and sync (barriers) requires subroutine calls
+- comm and sync (MPI_Barrier: wait until all p called) requires subroutine calls
 - comm: P2P | Collective | One-sided (1 prcsr)
 
 MPI SPMD (master-worker) | MPMD
@@ -196,6 +196,21 @@ integer) || displacement from window start to the beginning of the target buffer
 
 Collective Ops:
 - each p in comm exec same code, same seq
+
+Bcast
+P0 [A] [ ] [ ]      [A] [ ] [ ]   
+P1 [ ] [ ] [ ]  =>  [A] [ ] [ ]
+P2 [ ] [ ] [ ]      [A] [ ] [ ]
+
+Scatter
+P0 [A] [B] [C]  [ ] [ ] [ ]      [A] [B] [C]  [A] [ ] [ ]
+P1 [ ] [ ] [ ]  [ ] [ ] [ ]  =>  [ ] [ ] [ ]  [B] [ ] [ ]
+P2 [ ] [ ] [ ]  [ ] [ ] [ ]      [ ] [ ] [ ]  [C] [ ] [ ]
+
+Gather
+P0 [A] [ ] [ ]  [ ] [ ] [ ]      [A] [ ] [ ]  [ ] [ ] [ ]
+P1 [B] [ ] [ ]  [A] [B] [C]  <=  [B] [ ] [ ]  [ ] [ ] [ ]
+P2 [C] [ ] [ ]  [ ] [ ] [ ]      [C] [ ] [ ]  [ ] [ ] [ ]
 
 # RMA in MPI? maybe depends how many gpus are available
 ● One sided
