@@ -305,3 +305,28 @@ MPI_Win_free
 // Atomic one-sided operations:
 • MPI_Accumulate, MPI_Get_accumulate (return content of target buffer before accumulation in result_addr, element-wise atomically)
 • MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op), MPI_Compare_and_swap (compare_addr with value at target_disp)
+
+# Network Performance Properties
+Diameter: maximum of shortest path between a pair of nodes (all nodes)
+Latency: delay between send and receive, HW vs SW, ! program with many small messages
+Link Bandwidth: #wires * 1/time-per-bit  >  Effectiv Bandwidth, ! big messages
+Bisection Bandwidth: bw across smalles cut that divides network into 2 equal halves
+
+# Topologies
+Linear Array   d: n-1    bbw: 1
+Torus/Ring     d: n/2    bbw: 2
+2D Mesh        d: 2*(sqrt(n)-1)  bbw: sqrt(n)
+2D Torus       d: sqrt(n)    bbw: 2*sqrt(n)
+Bus            d: 1      bbw: 1
+Crossbar       d: 1      bbw: n^2/4
+Hypercube      n=2^d)    bbw: n/2
+Tree           d: 2logn  bbw: 1
+
+# Latency and BW Model
+Time sending message(length n) = latency + n/bw
+alpha >> beta >> time-per-flop
+! large comp-to-comm to be efficient
+
+# L(atency)o(verhead)g(ap)P(rocessors) Model
+Application performance model for dist mem systems
+explicit comm p2p messages
