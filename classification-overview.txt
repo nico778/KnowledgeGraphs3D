@@ -1,3 +1,7 @@
+# Linpack
+
+# Parallel vs Distributed Computing
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
