@@ -1,3 +1,12 @@
+# Linpack 
+Benchmark program, solves dense system of linear functions using LU factorization
+
+# Distributed Computing
+losely coupled systems, geographically distributed, indep systems providing service
+
+# Parallel Computing
+tightly coupled, components used at sam time to achieve specific goal, nodes often replicas in close proximity
+
 # check how cuda works underneath python abstraction
 
 pragma omp parallel // creates team of threads
