@@ -1,0 +1,9 @@
+# Network Performance Properties
+Diameter, Latency, Bandwidth, Bisection Bandwidth
+
+# Topologies
+Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (Dragonfly), Hypercube, Trees, Fat Trees
+
+# Latency and BW Model
+
+# LogP Model
