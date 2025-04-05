@@ -42,6 +42,22 @@
 
 # Matrix Optimization
 
+# Parallel Algorithms
+
+# Static vs Dynamic Task Decomposition
+
+# Decomposition Techniques
+
+# Speedup + Efficiency
+
+# Amdahls Law
+
+# Weak vs Strong Scaling
+
+# 2 Types of HW platforms
+
+# 2 Types of SW platforms
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
