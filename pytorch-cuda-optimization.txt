@@ -202,6 +202,28 @@ multiprocessor seq consistent if res of any exec == if
 - current HW does not offer SC
 => TSO, synchronizing instructions
 
+# Profiling
+- Summary statistics of performance measurements
+- performance bottlenecks
+
+# Tracing
+- when and where events took place along a global timeline
+- dynamic program behaviour
+
+# ompP overhead categories
+Imbalance, Synchronization, Limited Parall, Thread management
+
+# OMP optimization techniques
+avoid thr managment oh, limiting parall, nowait, combining parall regions, collapsing loops, avoid load imbalances, avoid false sharing
+
+# Avoid thread creation overhead
+if, num_threads
+
+# NUMA optimization
+- virtual mem mapped to physical mem in pages
+- mem page allocation det by first touch policy
+- init of data structures reflect later acc pattern
+
 # check how cuda works underneath python abstraction
 
 //initial;; thread
@@ -275,20 +297,25 @@ pragma omp single [clause ...] //exec by 1 thread
 }//no implicit barrier
 
 # Tasks how fine grained can we even go in pytorch
+// units of work(nested), exec indep, data dependences w other tasks
 // parall of irreg problems (unbounded loops, rec algos)
-// threads dynamically assigned
-// deferred or immediately
+// threads dynamically assigned, exec sequentially
+// deferred or undeferred
+// initial, implicit, explicit
 pragma omp task
     default (shared|none)
     private (list)
     firstprivate (list)
     shared (list)
-    if (logical-expr.)
-    final (logical-expr.)
+    if (shallow) //false => undeferred task
+    final (deep) //true => final task
     mergeable
-    depend (dependence-type:list)
+    depend (dependence-type:list) //only sibling tasks, fulfilled => scheduled exec
     priority (priority-value)
-    untied
+    untied //any thread can resume exec
+
+//task sync points
+barriers, taskwait(child tasks), taskgroup {} (child + desc tasks), taskyield
 
 # check how this works in pytorch or if beneficial for image processing!
 int histo[MAX_THREADS];
