@@ -7,6 +7,106 @@ losely coupled systems, geographically distributed, indep systems providing serv
 # Parallel Computing
 tightly coupled, components used at sam time to achieve specific goal, nodes often replicas in close proximity
 
+# Peak Performance
+theoretical max HW can deliver
+
+# CPU Time
+sec/progr = instr/progr * cycles/instr * sec/cycle
+
+# ILP Techniques
+- Pipelining: Overlapping individual parts of instr exec
+- Superscalar Execution: do multiple things at same time
+- Out-of-order Execution: re-order Ops on-the-fly
+- VLIW: compiler specifies what runs in parallel
+
+# Pipeline exec and speedup
+througput/bw: loads/h (limit: slowest ppl stage)  latency: time/load
+max speedup: #/pipeline stages
+
+# 5-step MIPS pipeline
+Instr Fetch, Instr Decode/Reg Fetch, Exec Addr Calc, Mem Acc, Write Back
+
+# Superscalar pipelines
+=> 1 instr/cycle (CPI<1)
+
+# Pipelining limits
+Overhead: Prevents arbitrary division of work
+Hazards: Prevents next instr exec designated clock cycle
+    -Structural Hazards: use HW to do 2 diff things at once
+    -Data Hazards: Instr depends on res of prev instr still in PL
+    -Control Hazards: delays between instr fetch and decisions about changes in progr flow
+Superscalaraty increases occurence of hazards
+
+# O-o-o Exec Requirements
+O-o-o exec => O-o-o compl => re-ordering required (illusion programmer)
+
+# Modern ILP
+Dynamically scheduled, O-o-o exec
+Grab instrs, det deps, elim deps, throw exec unit, each one move forward as deps resolved (looks like seq exec)
+Hazards: Speculative Exec (!waste time+power)
+Huge Complexity
+
+# VLIW
+EPIC, each instr expl coding multiple Ops
+compiler schedules parall exec, extract parall + avoid hazards
+
+# Vector Instructions
+programmer needs to id parall, HW does not re-extr parall
+
+# SIMD 
+Scalar vs SIMD
+SIMD vs Vector: Vectors longer, gather-scatter support, higher bw-to-mem
+DLP: parall from Ops on independent data items
+
+# SMT
+Combining ILP and TLP
+many chip resources underutilized
+add support for simult exec multiple indep threads
+Hyperthreading
+
+# Solutions to Memory Latency
+- elim mem Ops by saving vals in small, fast mem (cache)  -> !temporal locality (reusing item prev acc)
+- use better bw by getting chunk of mem, saving in cache, using whole chunck  -> !spatial locality (acc things nearby prev acc)
+- use better bw by allowing processor to isssue multi reads to mem system at once  -> !concurrency in instr stream
+- Overlap Comp & Mem Ops  -> Prefetching
+
+# Cache
+fast, exp mem keeps copies of data in main mem
+cache hit(in-cache mem acc) vs miss(non-cached)
+organized in cache line(64 bytes/chache blocks)
+cache line length: # bytes loaded in 1 entry
+
+# Cache Associativity
+Direct-mapped: only 1 address line in given range in cache
+Fully-associative: line can be stored anywhere
+n-way set-associative: det set for line => n slots availabe in set to store
+
+# Cache Misses
+Compulsory: 1st acc to a block
+Capacity: cannot contains all blocks acc by program
+Conflict(collsion): multi mem locations mapped to same cache location
+Coherence(Invalidation): other process updates mem
+
+# Improve Cache Performance
+Blocking/Tiling:
+    - Divides matrices into smaller blocks b×b
+    - exploits cache locality by reusing data within blocks
+use divide&conquer to define problem fitting in Register/L1/L2-cache
+
+# Computational Intensity
+m: # mem elem moved between mem types
+tm: time/slow mem Op
+f: # arithm Ops
+tf: time/arithm Op
+min possible t: f*tf
+
+q = f/m: avg # flops/slow mem acc    (! algo efficiency)
+a = tm/tf (! machine efficiency)
+
+# Matrix Optimization
+q ≈ b ≤ √(Mfast/3)
+block size limited by cache size
+
 # check how cuda works underneath python abstraction
 
 pragma omp parallel // creates team of threads
