@@ -58,6 +58,16 @@
 
 # 2 Types of SW platforms
 
+# Pthreads creation
+
+# Loop parallelism
+
+# Pthread management
+
+# Threads shared data
+
+# Pthread synchronization
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
