@@ -2,6 +2,46 @@
 
 # Parallel vs Distributed Computing
 
+# Peak Performance
+
+# CPU Time
+
+# ILP Techniques
+
+# Pipeline exec and speedup
+
+# 5-step MIPS pipeline
+
+# Superscalar pipelines
+
+# Pipelining limits
+
+# O-o-o exec Requirements
+
+# Modern ILP
+
+# VLIW
+
+# Vector Instructions
+
+# SIMD
+
+# SMT
+
+# Solutions to Memory Latency
+
+# Cache
+
+# Cache Associativity
+
+# Cache Misses
+
+# Improve Cache Performance
+
+# Computational Intensity
+
+# Matrix Optimization
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
