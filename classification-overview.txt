@@ -68,6 +68,22 @@
 
 # Pthread synchronization
 
+# Cache coherence
+
+# Write-back vs write-through cache
+
+# Snooping
+
+# Cache coherence protocols
+
+# True vs false sharing
+
+# Coherence limit
+
+# Memory consistency
+
+# Problems with sequential consistency
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
