@@ -107,6 +107,41 @@ a = tm/tf (! machine efficiency)
 q ≈ b ≤ √(Mfast/3)
 block size limited by cache size
 
+# Parallel Algorithms
+units of work, mapping to processors, distr intermediate res, sync processors
+
+# Static vs Dynamic Task Decomposition
+Static: tasks + deps known before exec
+Dynamic: exec of tasks may generate new tasks on-the-fly
+
+# Decomposition Techniques
+Data, Recursive, Functional, Exploratory, Speculative
+
+# Speedup + Efficiency
+Sn = T1/Tn
+En = Sn/n
+
+# Amdahl's Law
+E drops with incr # processors  <=  limited by serial part
+Sn= T1/Tn=(Ts+Tp)/(Ts+Tp/n)
+
+# Weak Scaling
+Incr problem size according to # processors, hope for constant exec t
+
+# Strong Scaling
+Keep problem size constant with incr # processors, hope for linear decrease in exec t (!harder)
+
+# 2 Types of HW platforms
+Shared Memory: main mem physically shared (CPU can dir read/write all of it)
+    - NUMA: some parts of mem accessible faster
+Distributed Memory: main mem phys distr (CPU can acc part of it)
+
+# 2 Types of SW platforms
+Threading:                            Message Passing:
+- program consists of threads         - program consists of processes
+- Ts have private/shared data         - ps have private data
+- comm implicirtl, r/w shared vars    - expl comm sending messages
+
 # check how cuda works underneath python abstraction
 
 pragma omp parallel // creates team of threads
