@@ -159,6 +159,49 @@ vars on stack private
 pthread_barrier_t, _init, _wait
 pthread_mutex_t, _lock, _unlock, _destroy
 
+# Cache coherence
+replicas of data items in multiple locations
+
+# Write-through cache
+each update to cache updates orig mem location
+
+# Write-back cache
+orig mem location updated eventually, when cache line evicted(order of flushing)
+
+# Snooping
+- cache controllers can snoop on bus, all transactions visible
+- controllers take action if transaction relevant: invalidate, update, supply value
+- cache line state info (valid, dirty)
+- coherence maintained at cache block granularity
+
+# Cache coherence protocols
+- Invalidation: invalidate replicas
+- Update
+
+# True sharing
+- frequent ws to shared var creates bottleneck => coherence traffic
+- local copies (per process/thread) where possible
+
+# False sharing
+- coherence maintained by lines, not individual words
+- 2 vars on same line possible
+- allocate data used by each processor contig, avoid interleaving in mem
+
+# Coherence limit
+- defines properties for accesses to single location only
+- ordering between multi locations?
+
+# Memory Consistency
+multiprocessor seq consistent if res of any exec == if
+- Ops of all processors exec seq order
+- Ops of each processor appear in seq in program order
+
+# Problems with sequential consistency
+- limits reordering
+- => complex implementations
+- current HW does not offer SC
+=> TSO, synchronizing instructions
+
 # check how cuda works underneath python abstraction
 
 //initial;; thread
