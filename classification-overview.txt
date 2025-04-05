@@ -84,6 +84,16 @@
 
 # Problems with sequential consistency
 
+# Profiling vs Tracing
+
+# ompP overhead categories
+
+# OMP optimization techniques
+
+# Avoid thread creation overhead
+
+# NUMA optimization
+
 # Network Performance Properties
 Diameter, Latency, Bandwidth, Bisection Bandwidth
 
