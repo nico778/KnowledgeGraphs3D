@@ -142,30 +142,50 @@ Threading:                            Message Passing:
 - Ts have private/shared data         - ps have private data
 - comm implicirtl, r/w shared vars    - expl comm sending messages
 
+# Pthreads creation
+cobegin/coend, fork/join, future, int pthread_create()
+
+# Loop parallelism
+thread creation overhead significant => coarse grained usually better performance
+
+# Pthread management
+pthread_yield(), pthread_exit(pass val to joining t), pthread_join(* thread, **result), pthread_self(), pthread_detach()
+
+# Threads shared data
+obj alloc on heap can be shared
+vars on stack private
+
+# Pthread synchronization
+pthread_barrier_t, _init, _wait
+pthread_mutex_t, _lock, _unlock, _destroy
+
 # check how cuda works underneath python abstraction
 
-pragma omp parallel // creates team of threads
+//initial;; thread
+pragma omp parallel // creates team of threads, exec redundantly
     if (scalar_expression)
     private (list)
     shared (list)
-    default (shared | none) //all threads execute code
+    default (shared | none) //all threads execute code, # threads can change
     firstprivate (list)
     lastprivate (list)
     reduction (operator: list)
     copyin (list)
     num_threads
+// implicit barrier
+//team threads => thread pool
 
 # Interesting worksharing constructs
 pragma omp for | sections | single
 
 # Interesting thread synchronization constructs
-pragma omp barrier | critical | atomic | omp_lock_t lock, omp_init_lock, omp_destroy_lock, omp_set_lock
+pragma omp barrier | critical | atomic | omp_(nest_)lock_t lock, omp_init_lock, omp_destroy_lock, omp_set_lock
 
 # Interesting runtime library function
 omp_get_num_threads(), omp_get_thread_num(), omp_set_num_threads, omp_set_dynamic(false), omp_set_nested(false)
 
 
-pragma omp for [clause ...]  //implicit barrier
+pragma omp for [clause ...]
     // Loop iterations are divided into pieces of size chunk and
     // dynamically scheduled among the threads; when a thread
     // finishes one chunk, it is dynamically assigned another
@@ -173,15 +193,15 @@ pragma omp for [clause ...]  //implicit barrier
     firstprivate (list)
     lastprivate (list)
     shared (list)
-    schedule (type [,chunk])
+    schedule (type [,chunk]): static (rr), dynamic -> rt, guided, auto (compiler/rt), runtime (defer) 
     ordered
     reduction (operator: list)
     collapse (n)
     // Threads do not synchronize at the end of the parallel loop.
     nowait
 
-<for_loop>
-
+<for_loop> //no barrier, work distr to threads
+//implicit barrier
 
 pragma omp sections [clause ...]
     private (list)
@@ -192,19 +212,29 @@ pragma omp sections [clause ...]
 
 {
  #pragma omp section
- <structured_block>
+ <structured_block> // exec by 1 thread
  #pragma omp section
- <structured_block>
+ <structured_block> // exec by same/other thread
  ...
+//implicit barrier
 }
 
-pragma omp single [clause ...]
+pragma omp single [clause ...] //exec by 1 thread
     private (list)
     firstprivate (list)
     copyprivate (operator: list) // Broadcasts values from single thread to all threads
     nowait
+//implicit barrier
+
+#pragma omp master [clauses] //only master thread exec
+{
+// block
+}//no implicit barrier
 
 # Tasks how fine grained can we even go in pytorch
+// parall of irreg problems (unbounded loops, rec algos)
+// threads dynamically assigned
+// deferred or immediately
 pragma omp task
     default (shared|none)
     private (list)
@@ -265,8 +295,8 @@ struct mycount
 # ! Very important to prevent unwanted side effects
 // OpenMP Data-Sharing Attribute Rules
 pragma omp parallel
-    Global/static variables: Shared
-    Local automatic variables: Private
+    Global/static variables: Shared (one copy)
+    Local automatic variables: Private (one copy per thread)
     Loop iteration variables (in combined parallel for): Private
     Default for other variables: Shared
 
