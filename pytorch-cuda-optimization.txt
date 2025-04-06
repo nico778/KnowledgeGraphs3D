@@ -716,8 +716,23 @@ host(idle/async exec)    device(exec of kernel)
 <----
 cudaMemcpy(D2H)
 
+# GPU Registers and Memory
+- each CUDA thread has private access to registers
+- each CUDA thread has access to own portion of global mem (local mem)
+- each thread block has access to shared mem (__shared__ on-chip)
+Global GPU DRAM mem(slower than on-chip), Texture, constant mem
+__device__ (stored in device mem)
+- scalars, vector types, arrays in registers 
+
+# GPU Hierarchy
+   |consists of SMs
+   |schedules thread blocks for exec
+   |
+Streaming Multiprocessor (SM)    -- schedules SIMD thread for exec -->    CUDA core = Streaming Processor (SP) (SIMD lane)
+   |consist of SPs
+
 # Cuda Hierarchy
-Stream (list of grids)
+Stream (list of grids, exec in-order)
 Grid (<= 2 32 thread blocks)
 Thread Block (<= 1024 CUDA threads): indep units of work, scheduled any way
 SIMD thread (32 CUDA threads) / Warp (exec in lockstep)
@@ -726,3 +741,8 @@ CUDA thread
 
 # Cuda Dev Toolchain
 Nvcc compiler(CPU+GPU code), PTX assembly instructions 
+
+# CUDA Comm and Sync
+- threads in same t block: comm w shared mem, __syncthreads()
+- t blocks in same grid: ! parallel sub-tasks
+- shared and global mem: atomic Ops
