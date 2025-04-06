@@ -117,3 +117,5 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 # Latency and BW Model
 
 # LogP Model
+
+# PGAS
