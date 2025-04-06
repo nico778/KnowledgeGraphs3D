@@ -148,6 +148,12 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 
 # CUDA host/device comm
 
+# GPU Registers and Memory
+
+# GPU Hierarchy
+
 # Cuda Hierarchy
 
 # Cuda Dev Toolchain
+
+# CUDA Comm and Sync
