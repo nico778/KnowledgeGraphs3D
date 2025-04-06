@@ -629,3 +629,6 @@ Application performance model for dist mem systems
 explicit comm p2p messages
 
 # PGAS
+Partitioned Global Address Space
+thread can directly r/w remote data, shared data divide in local/remote parts
+locality control, runs everywhere, performance + productivity
