@@ -100,6 +100,18 @@ Diameter, Latency, Bandwidth, Bisection Bandwidth
 # Topologies
 Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (Dragonfly), Hypercube, Trees, Fat Trees
 
+# MPI messaging protocols, avoid serialization
+
+# MPI Process mapping
+
+# MPI Resource contention
+
+# MPI Overlapping comm and comp
+
+# MPI One-sided Advantages
+
+# MPI RMA window objects
+
 # Latency and BW Model
 
 # LogP Model
