@@ -632,3 +632,24 @@ explicit comm p2p messages
 Partitioned Global Address Space
 thread can directly r/w remote data, shared data divide in local/remote parts
 locality control, runs everywhere, performance + productivity
+
+# UPC execution model
+threads work independently (spmd)
+MYTHREAD, upc_barrier/ upc_notify, upc_wait (split-phase)
+static vs dynamic threads mode
+
+# UPC shared scalars vs arrays
+scalars: partition thread 0
+arrays: spread over threads
+private vars: private thread mem space, shared vars: once by thread 0
+
+# UPC Worksharing
+upc_forall(init; test; loop; affinity)
+affinity%THREADS == MYTHREAD  vs  upc_threadof(affinity) == MYTHREAD
+
+# UPC layouts
+empty (cyclic): bad for locality
+[*] blocked layout: better for locality
+[0] indefinite, [b] fixed block size
+
+# UPC pointers
