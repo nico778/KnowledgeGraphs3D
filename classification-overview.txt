@@ -119,3 +119,13 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 # LogP Model
 
 # PGAS
+
+# UPC execution model
+
+# UPC shared scalars vs arrays
+
+# UPC Worksharing
+
+# UPC layouts
+
+# UPC pointers
