@@ -653,3 +653,7 @@ empty (cyclic): bad for locality
 [0] indefinite, [b] fixed block size
 
 # UPC pointers
+int *p1; private pointer to local mem (fast, local data)
+shared int *p2; private pointer to shared space (refer to remote data)
+int *shared p3; shared pointer to local mem (!avoid)
+shared int *shared p4; shared pointer to shared space (shared link structures)
