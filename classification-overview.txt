@@ -129,3 +129,17 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 # UPC layouts
 
 # UPC pointers
+
+# Heterogenous Architectures
+
+# OMP Offloading
+
+# OMP inital threads and contention groups
+
+# OMP Offloading Hierarchy
+
+# DDE
+
+# Controlling allocation and copy Ops?
+
+# Target directive clauses?
