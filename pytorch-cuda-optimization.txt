@@ -698,3 +698,31 @@ Device Data Environment
 - orig var mapped => corresp var on device
 - automatic updates (also manual)
 - map-enter / compute / map-exit
+
+# CUDA
+Compute Unified Device Architecture
+GPU(device)  =PCIe=>  CPU(host)
+functions (kernels) to be exec on device: __global__(invoked from host) / __device__(called from GPU functions)
+__host__(called from host, exec by CPU)
+
+# CUDA host/device comm
+cudaMalloc()
+---->
+cudaMemcpy(H2D)
+---->
+foo<<<>>>()
+---->
+host(idle/async exec)    device(exec of kernel)
+<----
+cudaMemcpy(D2H)
+
+# Cuda Hierarchy
+Stream (list of grids)
+Grid (<= 2 32 thread blocks)
+Thread Block (<= 1024 CUDA threads): indep units of work, scheduled any way
+SIMD thread (32 CUDA threads) / Warp (exec in lockstep)
+CUDA thread
+(daxpy: each it exec by CUDA thread)
+
+# Cuda Dev Toolchain
+Nvcc compiler(CPU+GPU code), PTX assembly instructions 
