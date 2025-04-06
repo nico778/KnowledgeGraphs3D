@@ -393,6 +393,47 @@ Message Passing:
 - comm and sync (MPI_Barrier: wait until all p called) requires subroutine calls
 - comm: P2P | Collective | One-sided (1 prcsr)
 
+MPI-1 Pattern: Wait at barrier, Late Sender/Receiver(until blocking send)
+
+Analyze MPI: IPM, Vampir, Scalasca
+
+# MPI messaging protocols 
+Eager(small messages): message+envelope stored on rcv side in pre-all buf => copied to user buf
+Rendezvous(large messages): rcvr indicates when buf (<= store data dir) available
+    - send/recv sync
+    - serialization of messages => change order of sends/rcvs, _Isend, _Sendrecv
+
+# MPI Process mapping
+- minimizing surface(comm)-to-volume(comp) ratio
+- Fill: the MPI rank space on a node before moving to next node
+- Round-robin: between nodes
+
+# MPI Resource contention <= multi process pairs/groups comm
+- single networks interface card per node
+- network message injection rate
+- topology not truly non-blocking
+- static routing, certian comm pattern(MPI_Alltoall) => hot spots
+
+=> domain decomposition techniques to min surf-to-vol
+=> aggregate messages
+=> Collective comm (MPI_Reduce)
+
+# MPI Overlapping comm and comp
+- MPI_Isend
+- OMP + MPI: hybrid programming
+
+# MPI One-sided Advantages
+- separation of data transfer and sync
+- better performance: less (message matching) oh, no need guar in-order del, good for RDMA
+- irreg/dynamically changing comm patterns
+
+# MPI RMA window objects
+- window: local mem made accessible to group of ps/exposed add range on p
+- collective call on all ps
+- each p: specifiy base addr and size of local window
+- disp_unit: byte-wise addressing
+- window object: union of all windows in a group
+
 MPI SPMD (master-worker) | MPMD
 
 group(ps(rank)) + context(all messages s+r) => communicator (default:MPI_COMM_WORLD)
@@ -410,7 +451,7 @@ MPI Tags:
 – MPI_RECV
 
 MPI Parameters (Put, Get, Send/Rec)
-● Put/Get:
+● Put/Get: //describes origin and recv bufs
 ○ origin_addr - initial address of origin buffer (choice) || Address of the buffer in
 which to receive the data
 ○ origin_count - number of entries in origin buffer (nonnegative integer)
@@ -423,7 +464,7 @@ integer) || displacement from window start to the beginning of the target buffer
 ○ Target_datatype datatype of each entry in target buffer (handle)
 ○ Win window object used for communication (handle)
 
-● Send(start, count, datatype, dest, tag, comm)
+● Send(start, count, datatype, dest, tag, comm) //describes send buf
 ○ Buf initial address of send buffer (choice)
 ○ Count number of elements in send buffer (nonnegative integer)
 ○ Datatype datatype of each send buffer element (handle)
@@ -431,7 +472,7 @@ integer) || displacement from window start to the beginning of the target buffer
 ○ Tag message tag (integer)
 ○ Comm communicator (handle)
 
-● Recv(start, count, datatype, source, tag, comm, status)
+● Recv(start, count, datatype, source, tag, comm, status) //transfer finished when returns
 ○ Count maximum number of elements in receive buffer (integer)
 ○ Datatype datatype of each receive buffer element (handle)
 ○ Source rank of source (integer)
