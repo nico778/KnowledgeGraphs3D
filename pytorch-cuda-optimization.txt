@@ -657,3 +657,44 @@ int *p1; private pointer to local mem (fast, local data)
 shared int *p2; private pointer to shared space (refer to remote data)
 int *shared p3; shared pointer to local mem (!avoid)
 shared int *shared p4; shared pointer to shared space (shared link structures)
+
+# Heterogenous Architectures
+> 1 type of compute resource
+1 general purpose processor (CPU), => 1 special purpose processor (target devices)
+mem: unified or separate (device)
+Ideal: 1 set of source files => let compiler optimize
+
+# OMP Offloading
+exec model is host-centric: begins on host, target regions offloaded to target device
+specify: exec config, device data env, host side meantime
+
+pragma omp target        offload execution to the target device
+pragma omp teams         start a league of teams
+pragma omp parallel      start a team of threads
+pragma omp distribute    schedule loop iterations to teams
+pragma omp for            
+pragma omp simd          schedule loop iterations to vector lanes
+
+pragma omp target
+pragma omp target data          like target but no code is offloaded
+pragma omp target enter data    standalone version of target data
+pragma omp target exit data     standalone version of target data
+pragma omp target update
+pragma omp declare target       make vars and functs. available on the target
+
+# OMP inital threads and contention groups
+target always creates new initial thread
+- thread running on accelerator, or host (host fallback)
+- all descendants => contention group
+- no sync between contention groups
+- comm using atomic vars
+
+# OMP Offloading Hierarchy
+threads exec on same SM have acc to shared mem and can sync eff
+- whole GPU exec league of teams => each team exec on a SM => threads exec on SPs
+
+# DDE
+Device Data Environment
+- orig var mapped => corresp var on device
+- automatic updates (also manual)
+- map-enter / compute / map-exit
