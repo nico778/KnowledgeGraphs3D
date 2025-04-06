@@ -143,3 +143,11 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 # Controlling allocation and copy Ops?
 
 # Target directive clauses?
+
+# CUDA
+
+# CUDA host/device comm
+
+# Cuda Hierarchy
+
+# Cuda Dev Toolchain
