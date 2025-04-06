@@ -434,6 +434,11 @@ Rendezvous(large messages): rcvr indicates when buf (<= store data dir) availabl
 - disp_unit: byte-wise addressing
 - window object: union of all windows in a group
 
+# MPI RMA Ordering, Atomicity, Completion
+- all Ops non-blocking, local completion =/= remote completion
+- local compl: syn Ops on whole window(fence, flush), MPI_Wait, _Test
+- ordering: acc Ops same pair of ps
+
 MPI SPMD (master-worker) | MPMD
 
 group(ps(rank)) + context(all messages s+r) => communicator (default:MPI_COMM_WORLD)
@@ -531,21 +536,28 @@ P2 [C]  [ ]      [C] [ABC]
 ● only one process (called the “origin”) actively participates in the data transfer
 ● Guarantees?
 
-Active / Passive Target Synchronization:
-● Fence
-○ MPI_Win_fence()
+# Remote Completion
+Active(target has to issue sync calls) / Passive Target Synchronization:
+● Fence              0
+○ MPI_Win_fence(int assert, MPI_Win win)
 ○ Collective call over all processes in the group associated with the window object
 ● PSCW
-○ MPI_Win_post()
+○ MPI_Win_post(MPI_Group from, int assert, MPI_Win win)
 ○ MPI_Win_start()
-○ MPI_Win_complete()
+○ MPI_Win_complete(MPI_Win win)
 ○ MPI_Win_wait()
 ○ More general
-○ Can select between exposure and access epochs
-● Passive-Target
-○ MPI_Win_lock()
+○ Can select between exposure(can be target) and access(can issue RMA Ops) epochs
+● Passive-Target(origin)
+○ MPI_Win_lock(int lock_type, int rank, int assert, MPI_Win win) //only specific window
 ○ MPI_Win_unlock()
 ○ Target does not call any sync routines (hence passive)
+
+MPI_Win_flush(int rank, MPI_Win win)
+MPI_Win_flush_local
+MPI_Win_flush_all
+MPI_Win_flush_local_all
+returns => local buffer can be reused 
 
 // Collective
 MPI_Gather    
@@ -589,7 +601,7 @@ MPI_Win_free
 
 // Atomic one-sided operations:
 • MPI_Accumulate, MPI_Get_accumulate (return content of target buffer before accumulation in result_addr, element-wise atomically)
-• MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op), MPI_Compare_and_swap (compare_addr with value at target_disp)
+• MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op, atomic to other acc Ops), MPI_Compare_and_swap (compare_addr with value at target_disp)
 
 # Network Performance Properties
 Diameter: maximum of shortest path between a pair of nodes (all nodes)
