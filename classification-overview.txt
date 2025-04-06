@@ -112,6 +112,8 @@ Linear Array, Torus/Ring, 2D Mesh, 2D Torus, Bus, Crossbar (fully connected), (D
 
 # MPI RMA window objects
 
+# MPI RMA Ordering, Atomicity, Completion
+
 # Latency and BW Model
 
 # LogP Model
