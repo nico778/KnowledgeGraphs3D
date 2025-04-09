@@ -362,12 +362,11 @@ struct mycount
     }
 }   
 
-# ! Very important to prevent unwanted side effects
-// OpenMP Data-Sharing Attribute Rules
+
+# OpenMP Data-Sharing Attribute Rules
 pragma omp parallel
     Global/static variables: Shared (one copy)
     Local automatic variables: Private (one copy per thread)
-    Loop iteration variables (in combined parallel for): Private
     Default for other variables: Shared
 
 pragma omp for
@@ -613,10 +612,11 @@ Bisection Bandwidth: bw across smalles cut that divides network into 2 equal hal
 Linear Array   d: n-1    bbw: 1
 Torus/Ring     d: n/2    bbw: 2
 2D Mesh        d: 2*(sqrt(n)-1)  bbw: sqrt(n)
-2D Torus       d: sqrt(n)    bbw: 2*sqrt(n)
+2D Torus       d: sqrt(n)  bbw: 2*sqrt(n)
+3D Torus       n = ?^3   bbw: 2×?^2  links: (6*n)/2
 Bus            d: 1      bbw: 1
 Crossbar       d: 1      bbw: n^2/4
-Hypercube      n=2^d)    bbw: n/2
+Hypercube      n=2^d)    bbw: n/2    links: (d*n)/2
 Tree           d: 2logn  bbw: 1
 
 # Latency and BW Model
