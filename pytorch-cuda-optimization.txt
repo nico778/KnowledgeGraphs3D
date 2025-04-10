@@ -614,6 +614,12 @@ MPI_Win_free
 • MPI_Accumulate, MPI_Get_accumulate (return content of target buffer before accumulation in result_addr, element-wise atomically)
 • MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op, atomic to other acc Ops), MPI_Compare_and_swap (compare_addr with value at target_disp)
 
+The domain decomposition approach splits the computational grid into blocks, with each process handling one block
+The critical challenge is managing the boundaries between blocks (halo cells) that are shared between neighboring processes
+Since each process can only update its local inner grid, a halo exchange mechanism is needed where processes send and receive boundary data to/from neighbors
+The implementation uses a Cartesian communicator to establish process positions and identify neighboring ranks
+Special handling of boundary conditions is required to allow waves to "flow out" of the grid (prevent reflection)
+
 # Network Performance Properties
 Diameter: maximum of shortest path between a pair of nodes (all nodes)
 Latency: delay between send and receive, HW vs SW, ! program with many small messages
