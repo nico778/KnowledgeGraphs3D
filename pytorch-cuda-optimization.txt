@@ -93,7 +93,7 @@ Coherence(Invalidation): other process updates mem
 
 # Improve Cache Performance
 Blocking/Tiling:
-    - Divides matrices into smaller blocks b×b that fit into cache
+    - partition matrices into smaller blocks b×b that fit into cache => work on blocks => temporal locality
     - exploits cache locality by reusing data within blocks
 Implementation: (1) partition nested for-loops (loop tiling) or (2) divide and conquer (recursion)
 use divide&conquer to define problem fitting in Register/L1/L2-cache
@@ -111,6 +111,8 @@ a = tm/tf (! machine efficiency)
 # Matrix Optimization
 q ≈ b ≤ √(Mfast/3)
 block size limited by cache size
+- Loop Interchange
+    - Change loop order from ijk to ikj => Improves spatial locality for B => Access pattern sequential for both => improves cache utilization
 
 # Parallel Algorithms
 units of work, mapping to processors, distr intermediate res, sync processors
