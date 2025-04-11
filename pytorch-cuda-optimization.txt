@@ -236,7 +236,6 @@ if, num_threads
 - init of data structures reflect later acc pattern
 (numactl)
 
-# check how cuda works underneath python abstraction
 
 //initial;; thread
 pragma omp parallel // creates team of threads, exec redundantly
@@ -308,7 +307,7 @@ pragma omp single [clause ...] //exec by 1 thread
 // block
 }//no implicit barrier
 
-# Tasks how fine grained can we even go in pytorch
+# Tasks 
 // units of work(nested), exec indep, data dependences w other tasks
 // parall of irreg problems (unbounded loops, rec algos)
 // threads dynamically assigned, exec sequentially
@@ -329,7 +328,7 @@ pragma omp task
 //task sync points
 barriers, taskwait(child tasks), taskgroup {} (child + desc tasks), taskyield
 
-# check how this works in pytorch or if beneficial for image processing!
+
 int histo[MAX_THREADS];
 #pragma omp parallel private(i)
 {
@@ -540,7 +539,7 @@ P2 [C]  [ ]      [C] [ABC]
 
 
 
-# RMA in MPI? maybe depends how many gpus are available
+# RMA in MPI
 ● One sided
 ● Remote Memory Access
 ● MPI_Put and MPI_Get
@@ -614,11 +613,12 @@ MPI_Win_free
 • MPI_Accumulate, MPI_Get_accumulate (return content of target buffer before accumulation in result_addr, element-wise atomically)
 • MPI_Fetch_and_op (Accumulate origin buffer into target buffer using op, atomic to other acc Ops), MPI_Compare_and_swap (compare_addr with value at target_disp)
 
-The domain decomposition approach splits the computational grid into blocks, with each process handling one block
-The critical challenge is managing the boundaries between blocks (halo cells) that are shared between neighboring processes
-Since each process can only update its local inner grid, a halo exchange mechanism is needed where processes send and receive boundary data to/from neighbors
-The implementation uses a Cartesian communicator to establish process positions and identify neighboring ranks
-Special handling of boundary conditions is required to allow waves to "flow out" of the grid (prevent reflection)
+# Stencil Op Parallelization
+- The domain decomposition approach splits the computational grid into blocks, with each process handling one block
+- The critical challenge is managing the boundaries between blocks (halo cells) that are shared between neighboring processes
+- Since each process can only update its local inner grid, a halo exchange mechanism is needed where processes send and receive boundary data to/from neighbors
+- The implementation uses a Cartesian communicator to establish process positions and identify neighboring ranks
+- Special handling of boundary conditions is required to allow waves to "flow out" of the grid (prevent reflection)
 
 # Network Performance Properties
 Diameter: maximum of shortest path between a pair of nodes (all nodes)
@@ -630,12 +630,12 @@ Bisection Bandwidth: bw across smalles cut that divides network into 2 equal hal
 Linear Array   d: n-1    bbw: 1
 Torus/Ring     d: n/2    bbw: 2
 2D Mesh        d: 2*(sqrt(n)-1)  bbw: sqrt(n)
-2D Torus       d: sqrt(n)  bbw: 2*sqrt(n)
+2D Torus       d: sqrt(n)  bbw: 2*sqrt(n)    links: 2n
 3D Torus       n = ?^3   bbw: 2×?^2  links: (6*n)/2
 Bus            d: 1      bbw: 1
 Crossbar       d: 1      bbw: n^2/4
 Hypercube      n=2^d)    bbw: n/2    links: (d*n)/2
-Tree           d: 2logn  bbw: 1
+Tree           d: 2logn  bbw: 1    
 
 # Latency and BW Model
 Time sending message(length n) = latency + n/bw
@@ -648,7 +648,7 @@ explicit comm p2p messages
 
 # PGAS
 Partitioned Global Address Space
-thread can directly r/w remote data, shared data divide in local/remote parts
+threads can directly r/w remote data, shared data divide in local/remote parts
 locality control, runs everywhere, performance + productivity
 
 # UPC execution model
